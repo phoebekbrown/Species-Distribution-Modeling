@@ -22,4 +22,5 @@ map <- leaflet() %>%
 
 # save the map
 mapshot2(map, file = "output/leaflettest.png")
-# error :-(
+
+
