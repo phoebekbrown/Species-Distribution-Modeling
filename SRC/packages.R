@@ -27,3 +27,4 @@ if(any(installed_packages==FALSE)){
 
 # Packages loading, with library function
 invisible(lapply(packages, library, character.only=TRUE))
+

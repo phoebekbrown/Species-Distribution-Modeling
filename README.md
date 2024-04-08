@@ -2,6 +2,6 @@
 
 Using R to generate a species distribution model
 
-## *Habronattus americanus*
+## *Lumnitzera racemosa Willd.*
 
-![Habronattus americanus - a jumping spider!](images/Habronattus_americanus.jpg)
+![Lumnitzera racemosa Willd. - the white-flowered black mangrove!]

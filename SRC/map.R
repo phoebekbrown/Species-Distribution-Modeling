@@ -1,10 +1,6 @@
 # read in the data
 data <- read.csv("data/cleanedData.csv")
 
-# load libraries
-library(leaflet)
-library(mapview)
-
 # generate occurrence map with legend
 map <- leaflet() %>%
   addProviderTiles("Esri.WorldTopoMap") %>%
@@ -13,14 +9,17 @@ map <- leaflet() %>%
                    lng = ~decimalLongitude,
                    radius = 3,
                    color = "maroon",
-                   fill = 0.8) %>%
+                   fillOpacity = 0.8) %>%
   addLegend(position = "topright",
-            title = "Species Occurrence from GBIF",
-            labels = "Habronatus americanus",
+            title = "White-flowered Black Mangrove Occurrence Map",
+            labels = "Lumnitzera racemosa Willd.",
             colors = "maroon",
             opacity = 0.8)
 
+#view the map
+map
+
 # save the map
-mapshot2(map, file = "output/leaflettest.png")
+mapshot2(map, file = "output/mangrovesOccurrence.png")
 
 
