@@ -121,7 +121,7 @@ presenceAbsenceEnvDf <- as.data.frame(rbind(occEnv, absenceEnv))
 
 
 # If you get a Java error, restart R, and reload the packages
-habronattusCurrentSDM <- dismo::maxent(x = presenceAbsenceEnvDf, ## env conditions
+mangroveCurrentSDM <- dismo::maxent(x = presenceAbsenceEnvDf, ## env conditions
                                        p = presenceAbsenceV,   ## 1:presence or 0:absence
                                        path=paste("maxent_outputs"), #maxent output dir 
 )                              
@@ -138,43 +138,42 @@ geographicArea <- crop(currentClimRasterStack, predictExtent, snap = "in")
 
 
 # make a raster layer for the map, combining everything
-habronattusPredictPlot <- raster::predict(habronattusCurrentSDM, geographicArea) 
+mangrovePredictPlot <- raster::predict(mangroveCurrentSDM, geographicArea) 
 
 
 # convert to a spatial pixels data frame
-raster.spdf <- as(habronattusPredictPlot, "SpatialPixelsDataFrame")
+raster.spdf <- as(mangrovePredictPlot, "SpatialPixelsDataFrame")
 
 # convert to data frame
-habronattusPredictDf <- as.data.frame(raster.spdf)
+mangrovePredictDf <- as.data.frame(raster.spdf)
 
 # get world boundaries
 wrld <- ggplot2::map_data("world")
 
 
-# create bounding box from data frame
-xmax <- max(habronattusPredictDf$x)
-xmin <- min(habronattusPredictDf$x)
-ymax <- max(habronattusPredictDf$y)
-ymin <- min(habronattusPredictDf$y)
+# create bounding box, based on Godavari Delta long lat
+xmax <- 90
+xmin <- 75
+ymax <- 20
+ymin <- 15
 
 # map!
 ggplot() +
   geom_polygon(data = wrld, mapping = aes(x = long, y = lat, group = group),
                fill = "grey75") +
-  geom_raster(data = habronattusPredictDf, aes(x = x, y = y, fill = layer)) + 
+  geom_raster(data = mangrovePredictDf, aes(x = x, y = y, fill = layer)) + 
   scale_fill_gradientn(colors = terrain.colors(10, rev = T)) +
   coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = F) +#expand=F fixes margin
   scale_size_area() +
-  borders("state") +
   borders("world", colour = "black", fill = NA) + 
-  labs(title = "SDM of Habronattus americanus Under Current Climate Conditions",
+  labs(title = "SDM of Lumnitzera racemosa Willd. \nUnder Current Climate Conditions",
        x = "longitude",
        y = "latitude",
        fill = "Environmental Suitability")+ 
   theme(legend.box.background=element_rect(),legend.box.margin=margin(5,5,5,5)) 
 
 # save it!
-ggsave("output/habronattusCurrentSdm.jpg",  width = 8, height = 6)
+ggsave("output/mangroveCurrentSdm.jpg",  width = 8, height = 6)
 
 #### End Current SDM #########
 
@@ -201,37 +200,37 @@ geographicAreaFutureC6 <- crop(futureClimateRaster, predictExtent)
 
 # 8. Run the future SDM
 
-habronattusFutureSDM <- raster::predict(habronattusCurrentSDM, geographicAreaFutureC6)
+mangroveFutureSDM <- raster::predict(mangroveCurrentSDM, geographicAreaFutureC6)
 
 
 # 9. Plot the future SDM
 
 
-habronattusFutureSDMDf <- as.data.frame(habronattusFutureSDM, xy=TRUE)
+mangroveFutureSDMDf <- as.data.frame(mangroveFutureSDM, xy=TRUE)
 
 
-xmax <- max(habronattusFutureSDMDf$x)
-xmin <- min(habronattusFutureSDMDf$x)
-ymax <- max(habronattusFutureSDMDf$y)
-ymin <- min(habronattusFutureSDMDf$y)
+xmax <- 90
+xmin <- 75
+ymax <- 20
+ymin <- 15
 
 
 ggplot() +
   geom_polygon(data = wrld, mapping = aes(x = long, y = lat, group = group),
                fill = "grey75") +
-  geom_raster(data = habronattusFutureSDMDf, aes(x = x, y = y, fill = maxent)) + 
+  geom_raster(data = mangroveFutureSDMDf, aes(x = x, y = y, fill = maxent)) + 
   scale_fill_gradientn(colors = terrain.colors(10, rev = T)) +
   coord_fixed(xlim = c(xmin, xmax), ylim = c(ymin, ymax), expand = F) +
   scale_size_area() +
   borders("state") +
   borders("world", colour = "black", fill = NA) + 
-  labs(title = "Future SDM of Habronattus americanus Under CMIP6 Climate Conditions",
+  labs(title = "Future SDM of Lumnitzera racemosa Willd. \nUnder CMIP6 Climate Conditions",
        x = "longitude",
        y = "latitude",
        fill = "Env Suitability") +
   theme(legend.box.background=element_rect(),legend.box.margin=margin(5,5,5,5)) 
 
-ggsave("output/habronattusFutureSdm.jpg",  width = 8, height = 6)
+ggsave("output/mangroveFutureSdm.jpg",  width = 8, height = 6)
 
 
 
